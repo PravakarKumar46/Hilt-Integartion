@@ -1,16 +1,14 @@
 package com.example.hilt_integartion.framework.mvvm.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.hilt_integartion.R
 import com.example.hilt_integartion.framework.mvvm.data.model.User
 import com.example.hilt_integartion.framework.mvvm.recyclerview.MainAdapter
@@ -21,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val user = ArrayList<User>()
-
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var adapter: MainAdapter
     private lateinit var progressBar: ProgressBar
@@ -32,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         setupUI()
         setupObserver()
     }
-
 
     private fun setupUI() {
 
@@ -46,7 +42,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        mainViewModel.users.observe(this, Observer {
+        mainViewModel.users.observe(this) {
+
             when (it.status) {
 
                 Status.SUCCESS -> {
@@ -65,11 +62,11 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 }
 
-                else -> {}
             }
-        })
+        }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun renderList(users: List<User>) {
         adapter.addData(users)
         adapter.notifyDataSetChanged()

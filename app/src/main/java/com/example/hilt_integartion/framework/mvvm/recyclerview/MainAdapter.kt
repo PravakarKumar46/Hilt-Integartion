@@ -50,5 +50,4 @@ class MainAdapter(
         users.addAll(list)
     }
 
-
 }
