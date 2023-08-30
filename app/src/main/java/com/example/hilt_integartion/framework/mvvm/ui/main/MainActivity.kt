@@ -2,6 +2,7 @@ package com.example.hilt_integartion.framework.mvvm.ui.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -14,6 +15,7 @@ import com.example.hilt_integartion.framework.mvvm.data.model.User
 import com.example.hilt_integartion.framework.mvvm.recyclerview.MainAdapter
 import com.example.hilt_integartion.framework.mvvm.recyclerview.MainViewModel
 import com.example.hilt_integartion.framework.mvvm.utils.Status
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +29,15 @@ class MainActivity : AppCompatActivity() {
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setupUI()
         setupObserver()
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (!it.isSuccessful) {
+                Log.d("TokenDetails", "Token failed to receive!")
+                return@addOnCompleteListener
+            }
+            val token = it.result
+            Log.d("TokenDetails", token)
+        }
     }
 
     private fun setupUI() {
